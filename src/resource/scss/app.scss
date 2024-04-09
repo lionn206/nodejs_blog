@@ -1,11 +1,17 @@
 @import 'variables';
-.text{
+.text {
     font-size: 1rem;
     background-color: pink;
 }
 
-h1{
-    color: $red-color;
-    width: 100px;
+h1 {
+        color: $red-color;
+       width: 100px;
 }
-
+.footer {
+         background-color: #262626;
+}
+.search-form {  
+          margin-top: 20px;
+            margin-left: 50px;
+}
