@@ -24,8 +24,19 @@ class ClubController {
         res.send('SAVED !!')
     }
 
+    //[Get] club/:id/edit
     edit(req, res, next) {
-        res.render("club/edit")
+        Course.findById(req.params.id)
+            .then(course => 
+                res.render("club/edit", {course: mongooseToObject(course)}))
+            .catch(next);
+        
+    }
+    //[PUT] club/:id
+    async update(req, res, next){
+        await Course.updateOne({_id: req.params.id}, req.body)
+            .then(() => res.redirect('/me/stored/club'))
+            .catch(next)
     }
 }
 module.exports = new ClubController();

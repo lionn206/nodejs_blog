@@ -1,34 +1,35 @@
 <div class="mt-4 ml-4 mr-4">
   <h3>Chỉnh sửa club</h3>
-  <form method="POST" action=""> 
+  <form method="POST" action="/club/{{course._id}}?_method=PUT"> 
     <div class="form-group">
       <label for="name">Tên</label>
       <input
         type="text"
         class="form-control"
+        value="{{course.name}}"
         id="name"
         name="name"
       />
     </div>
      <div class="form-group">
       <label for="description">Mô tả</label>
-      <input
-        type="text"
+      <textarea
         class="form-control"
         id="description"
         name="description"
-      />
+      >{{course.description}}</textarea>
     </div>
      <div class="form-group">
-      <label for="videoID">Video</label>
+      <label for="level">Trình độ</label>
       <input
         type="text"
         class="form-control"
-        id="videoID"
-        name="videoID"
+        value="{{course.level}}"
+        id="level"
+        name="level"
       />
     </div>
     
-    <button type="submit" class="btn btn-primary">Tạo</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>

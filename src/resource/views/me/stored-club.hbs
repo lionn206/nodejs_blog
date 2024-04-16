@@ -6,7 +6,7 @@
         <th scope="col">STT</th>
         <th scope="col">Tên clb</th>
         <th scope="col">Trình độ</th>
-        <th scope="col">Thời gian tạo</th>
+        <th scope="col">VideoID</th>
         <th scope="col">Thao tác</th>
       </tr>
     </thead>
@@ -16,7 +16,7 @@
         <th scope="row">{{sum @index 1 }}</th>
         <td>{{this.name}}</td>
         <td>{{this.level}}</td>
-        <td>{{this.createdAt}}</td>
+        <td>{{this.videoID}}</td>
         <td>
             <a class="btn btn-primary" href="/club/{{this._id}}/edit" role="button">Sửa</a>
             <a class="btn btn-danger" href="#" role="button">Xóa</a>
