@@ -19,10 +19,60 @@
         <td>{{this.videoID}}</td>
         <td>
             <a class="btn btn-primary" href="/club/{{this._id}}/edit" role="button">Sửa</a>
-            <a class="btn btn-danger" href="#" role="button">Xóa</a>
+            <a class="btn btn-danger " data-toggle="modal" data-target="#delete-club-modal" data-id="{{this._id}}" href="#" role="button">Xóa</a>
         </td>
       </tr>
        {{/each}}
     </tbody>
   </table>
 </div>
+
+{{! Confirm delete}}
+<div class="modal fade" id="delete-club-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delete-club-modal">XÓA 1 CLUB</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn xóa không????
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button id="btn-delete-club" type="button" class="btn btn-danger">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- delete hidden form --}}
+<form method="POST" name="delete-club-form"></form>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var courseID;
+    var deleteForm = document.forms['delete-club-form'];
+    var btnDeleteClub = document.getElementById('btn-delete-club');
+
+    //when dialog confirm clicked
+    $('#delete-club-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    courseID = button.data('id');
+    });
+
+    
+    btnDeleteClub.onclick = function () {
+      deleteForm.action= '/club/' + courseID +'?_method=DELETE';
+      deleteForm.submit();
+    }
+    
+    
+   
+  });
+
+ 
+</script>

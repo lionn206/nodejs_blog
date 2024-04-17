@@ -38,5 +38,14 @@ class ClubController {
             .then(() => res.redirect('/me/stored/club'))
             .catch(next)
     }
+
+    //[DELETE] club/:id
+    async delete(req, res, next){
+        await Course.deleteOne({_id: req.params.id})
+            .then(() => res.redirect('back'))
+            .catch(next);
+
+    }
+    
 }
 module.exports = new ClubController();

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
+const mongooseDelete = require('mongoose-delete');
 
-mongoose.plugin(slug);
 const Course = new Schema({
     name: { type: String, require: true},
     description: { type: String},
@@ -14,5 +14,9 @@ const Course = new Schema({
     timestamps: true,
 }
 );
+
+//add plugin soft delete 
+mongoose.plugin(slug);
+Course.plugin(mongoose_delete);
 
 module.exports = mongoose.model('Course', Course);
