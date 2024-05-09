@@ -1,12 +1,6 @@
 <div class="container mt-4">
-  <h3>Câu Lạc Bộ của tôi</h3>
-  <div>
-    <h3>
-      <a href="/me/trash/club">
-        <i class="fa fa-trash"></i>
-      </a>
-    </h3>
-  </div>
+  <h3>Câu Lạc Bộ đã xóa</h3>
+  <a href="/me/stored/club">Danh sách CLB</a>
   <table class="table mt-4">
     <thead>
       <tr>
@@ -25,13 +19,13 @@
         <td>{{this.level}}</td>
         <td>{{this.videoID}}</td>
         <td>
-            <a class="btn btn-primary" href="/club/{{this._id}}/edit" role="button">Sửa</a>
-            <a class="btn btn-danger " data-toggle="modal" data-target="#delete-club-modal" data-id="{{this._id}}" href="#" role="button">Xóa</a>
+            <a class="btn btn-primary btn-restore" data-id="{{this._id}}">Khôi phục</a>
+            <a class="btn btn-danger " data-toggle="modal" data-target="#delete-club-modal" data-id="{{this._id}}" href="#" role="button">Xóa vĩnh viễn</a>
         </td>
       </tr>
         {{else}}
           <tr>
-            <td colspan="5" class="text-center">Bạn đang không có club nào. <a href="/club/create">Tạo club ngay</a></td>
+            <td colspan="5" class="text-center">Thùng rác trống. <a href="/me/stored/club">Quay lại danh sách club</a></td>
           </tr>
         {{/each}}
     </tbody>
@@ -59,15 +53,19 @@
   </div>
 </div>
 
-{{!-- delete hidden form --}}
+
 <form method="POST" name="delete-club-form"></form>
+<form method="POST" name="restore-club-form"></form>
+
 
 <script>
 
   document.addEventListener('DOMContentLoaded', function(){
     var courseID;
     var deleteForm = document.forms['delete-club-form'];
+    var restoreForm = document.forms['restore-club-form'];
     var btnDeleteClub = document.getElementById('btn-delete-club');
+    var restoreBtn = $('.btn-restore');
 
     //when dialog confirm clicked
     $('#delete-club-modal').on('show.bs.modal', function (event) {
@@ -77,11 +75,19 @@
 
     
     btnDeleteClub.onclick = function () {
-      deleteForm.action= '/club/' + courseID +'?_method=DELETE';
+      deleteForm.action= '/club/' + courseID +'/force?_method=DELETE';
       deleteForm.submit();
     }
     
+    //restore btn clicked
     
+    restoreBtn.click(function(e){
+      e.preventDefault();
+
+      var courseID = $(this).data('id');
+      restoreForm.action= '/club/' + courseID +'/restore?_method=PATCH';
+      restoreForm.submit();
+    });
    
   });
 

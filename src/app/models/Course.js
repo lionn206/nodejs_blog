@@ -15,8 +15,9 @@ const Course = new Schema({
 }
 );
 
-//add plugin soft delete 
+//add plugin 
 mongoose.plugin(slug);
-Course.plugin(mongoose_delete);
-
+Course.plugin(mongooseDelete, { 
+    deletedAt : true,
+    overrideMethods: 'all' });
 module.exports = mongoose.model('Course', Course);
