@@ -3,6 +3,7 @@ const router = express.Router();
 
 const clubController = require('../app/controllers/ClubController');
 
+router.post('/handleFormAction', clubController.handleFormAction);
 router.get('/create', clubController.create);
 router.post('/store', clubController.store);
 router.get('/:id/edit', clubController.edit);

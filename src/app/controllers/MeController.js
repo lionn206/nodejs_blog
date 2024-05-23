@@ -3,7 +3,18 @@ const { mutipleMongooseToObject } = require("../../util/mongoose");
 class MeController {
   //[GET] /me/stored/club
   async storedClub(req, res, next) {
-    Promise.all([Course.find({}),Course.countDocumentsWithDeleted({deleted: true})])
+    let clubQuery = Course.find({});
+    
+
+    if(req.query.hasOwnProperty('_sort')){
+      clubQuery = clubQuery.sort({
+        [req.query.column] : req.query.type
+      });
+    }
+
+
+
+    Promise.all([clubQuery,Course.countDocumentsWithDeleted({deleted: true})])
       .then(([courses,deletedCount])=>{
         res.render("me/stored-club", {
           deletedCount,
@@ -11,10 +22,6 @@ class MeController {
         })
       })
       .catch(next);
-
-
-
-
   }
 
   //[GET] /me/trash/club

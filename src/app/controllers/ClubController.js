@@ -1,5 +1,7 @@
 const Course = require("../models/Course");
 const { mongooseToObject } = require("../../util/mongoose");
+
+
 class ClubController {
   //[GET] club/:slug
   show(req, res, next) {
@@ -24,6 +26,7 @@ class ClubController {
       .then(() => res.redirect("/me/stored/club"))
       .catch(next);
   }
+
 
   //[Get] club/:id/edit
   edit(req, res, next) {
@@ -59,6 +62,19 @@ class ClubController {
     await Course.restore({ _id: req.params.id })
       .then(() => res.redirect("back"))
       .catch(next);
+  }
+  //[POST] club/handleFormAction
+  handleFormAction(req, res, next) {
+    switch (req.body.action) {
+      case "delete":
+        Course.delete({ _id: { $in: req.body.coursesIds } })
+          .then(() => res.redirect("back"))
+          .catch(next);
+        break;
+
+      default:
+        res.json({ message: "Action is invalid !" });
+    }
   }
 }
 module.exports = new ClubController();

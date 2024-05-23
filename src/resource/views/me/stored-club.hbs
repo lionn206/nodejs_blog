@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<form class="container mt-4" name="container-form" method="post" action="/club/handleFormAction">
   <h3>Câu Lạc Bộ của tôi</h3>
   <div>
     <h3>
@@ -6,45 +6,94 @@
         <i class="fa fa-trash"></i>({{deletedCount}})
       </a>
     </h3>
+    <div class="mt-4">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="checkbox-all" />
+        <label class="form-check-label" for="checkbox-all">Chọn tất cả</label>
+      </div>
+
+      <select class="form-control-sm" id="exampleFormControlSelect1" name="action" required> 
+        <option value="">-- Chọn hành động --</option>
+        <option value="delete">Xóa</option>
+      </select>
+
+      <button class="btn btn-primary btn-sm btn-checkAll-submit disabled">Thực hiện</button>
+    </div>
   </div>
+ 
   <table class="table mt-4">
     <thead>
       <tr>
-        <th scope="col">STT</th>
-        <th scope="col">Tên clb</th>
+        <th scope="col" colspan="2">STT</th>
+        <th scope="col">
+          Tên clb <a href="?_sort&column=name&type=desc"> <i class="fa fa-trash"></i></a> <a href="?_sort&column=name&type=asc"> <i class="fa fa-trash"></i></a>
+        </th>
         <th scope="col">Trình độ</th>
         <th scope="col">VideoID</th>
         <th scope="col">Thao tác</th>
       </tr>
     </thead>
     <tbody>
-        {{#each courses}}
-      <tr>
-        <th scope="row">{{sum @index 1 }}</th>
-        <td>{{this.name}}</td>
-        <td>{{this.level}}</td>
-        <td>{{this.videoID}}</td>
-        <td>
-            <a class="btn btn-primary" href="/club/{{this._id}}/edit" role="button">Sửa</a>
-            <a class="btn btn-danger " data-toggle="modal" data-target="#delete-club-modal" data-id="{{this._id}}" href="#" role="button">Xóa</a>
-        </td>
-      </tr>
-        {{else}}
-          <tr>
-            <td colspan="5" class="text-center">Bạn đang không có club nào. <a href="/club/create">Tạo club ngay</a></td>
-          </tr>
-        {{/each}}
+      {{#each courses}}
+        <tr>
+          <td>
+            <div class="form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                value="{{this._id}}"
+                name="coursesIds[]"
+              />
+            </div>
+          </td>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{this.name}}</td>
+          <td>{{this.level}}</td>
+          <td>{{this.videoID}}</td>
+          <td>
+            <a
+              class="btn btn-primary"
+              href="/club/{{this._id}}/edit"
+              role="button"
+            >Sửa</a>
+            <a
+              class="btn btn-danger"
+              data-toggle="modal"
+              data-target="#delete-club-modal"
+              data-id="{{this._id}}"
+              href="#"
+              role="button"
+            >Xóa</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="5" class="text-center">Bạn đang không có club nào.
+            <a href="/club/create">Tạo club ngay</a></td>
+        </tr>
+      {{/each}}
     </tbody>
   </table>
-</div>
+</form>
 
 {{! Confirm delete}}
-<div class="modal fade" id="delete-club-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="delete-club-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="delete-club-modal">XÓA 1 CLUB</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -52,38 +101,91 @@
         Bạn có chắc chắn muốn xóa không????
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-        <button id="btn-delete-club" type="button" class="btn btn-danger">Xóa</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >Hủy</button>
+        <button
+          id="btn-delete-club"
+          type="button"
+          class="btn btn-danger"
+        >Xóa</button>
       </div>
     </div>
   </div>
 </div>
 
-{{!-- delete hidden form --}}
+{{! delete hidden form }}
 <form method="POST" name="delete-club-form"></form>
 
 <script>
 
-  document.addEventListener('DOMContentLoaded', function(){
-    var courseID;
-    var deleteForm = document.forms['delete-club-form'];
-    var btnDeleteClub = document.getElementById('btn-delete-club');
-
-    //when dialog confirm clicked
-    $('#delete-club-modal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    courseID = button.data('id');
+  document.addEventListener('DOMContentLoaded', function(){ 
+  var courseID; 
+  var deleteForm = document.forms['delete-club-form']; 
+  var btnDeleteClub = document.getElementById('btn-delete-club'); 
+  var checkboxAll = $('#checkbox-all');
+  var courseItemCheckBox = $('input[name="coursesIds[]"]');
+  var btnCheckAllSubmit = $('.btn-checkAll-submit');
+  //var containerForm = document.forms['container-form'];
+  var containerForm = $('form[name="container-form"]');
+  //when dialog confirm clicked
+  $('#delete-club-modal').on('show.bs.modal', function (event) { 
+    var button = $(event.relatedTarget); 
+    courseID = button.data('id'); 
+    });
+  btnDeleteClub.onclick = function () { 
+    deleteForm.action= '/club/' + courseID+'?_method=DELETE'; deleteForm.submit(); 
+    } 
+    
+    //check box all changed
+    checkboxAll.change(function(){
+      var isChecked = $(this).prop('checked');
+      if(isChecked){
+        courseItemCheckBox.prop('checked', true);
+      }
+      else{
+        courseItemCheckBox.prop('checked', false);
+      }
+      renderCheckAllSubmitBtn();
+    });
+    //check box one item changed
+    courseItemCheckBox.change(function (){
+      var isChecked = courseItemCheckBox.length === $('input[name="coursesIds[]"]:checked').length;
+      if(isChecked){
+        checkboxAll.prop('checked', true);
+      }
+      else{
+        checkboxAll.prop('checked', false);
+      }
+      renderCheckAllSubmitBtn();
     });
 
-    
-    btnDeleteClub.onclick = function () {
-      deleteForm.action= '/club/' + courseID +'?_method=DELETE';
-      deleteForm.submit();
-    }
-    
-    
-   
-  });
+    //check all submit button clicked
+   /* btnCheckAllSubmit.click(function(e){  
+      e.preventDefault();
+      var isSubmittable = !$(this).hasClass('disabled');
+      if(isSubmittable){
+        containerForm.submit();
+      }
+    });*/
+    containerForm.on('submit',function(e){
+      var isSubmittable = !btnCheckAllSubmit.hasClass('disabled');
+      if(!isSubmittable){
+        e.preventDefault();
+      }
+    });
 
- 
+    // Re-render check all submit button: enable btn 'thuc hien'
+    function renderCheckAllSubmitBtn(){
+      var countChecked = $('input[name="coursesIds[]"]:checked').length;
+      if(countChecked ){
+        btnCheckAllSubmit.removeClass('disabled')
+      }
+      else{
+        btnCheckAllSubmit.addClass('disabled');
+      }
+    }
+    });
 </script>
